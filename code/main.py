@@ -227,17 +227,20 @@ class Processor():
         Processor for Skeleton-based Action Recgnition
     """
 
-    def __init__(self, arg):
+    def __init__(self, arg, model, train_set, val_set):
         self.arg = arg
         self.save_arg()
         self.load_data()
-        self.load_model()
+        self.model = model
         self.load_optimizer()
+        self.trainLoader=train_set
+        self.valLoader=val_set
+        self.testLoader=val_set
         self.seen = 0
         self.best_accuracy = 0
         self.params = arg
         self.graph = nx.Graph()
-        self.num_joints = 25
+        self.num_joints = 22
         self.best_epoch = 0
 
     def save_checkpoint(self, path, filename, epoch):
@@ -277,21 +280,21 @@ class Processor():
             print(e)
 
     def load_data(self):
-        Feeder = import_class(self.arg.feeder)
-
-        self.data_loader = dict()
-        self.trainLoader = Feeder(**self.arg.train_feeder_args)
-        self.testLoader = Feeder(**self.arg.test_feeder_args)
-
-
-        print(self.trainLoader == self.testLoader)
-        if (arg.validation_split):
-            val_size = int(0.2 * len(self.trainLoader))
-
-
-            self.trainLoader, self.valLoader = torch.utils.data.random_split(self.trainLoader,
-                                                                             [len(self.trainLoader) - val_size,
-                                                                              val_size])
+        # Feeder = import_class(self.arg.feeder)
+        #
+        # self.data_loader = dict()
+        # self.trainLoader = Feeder(**self.arg.train_feeder_args)
+        # self.testLoader = Feeder(**self.arg.test_feeder_args)
+        #
+        #
+        # print(self.trainLoader == self.testLoader)
+        # if (arg.validation_split):
+        #     val_size = int(0.2 * len(self.trainLoader))
+        #
+        #
+        #     self.trainLoader, self.valLoader = torch.utils.data.random_split(self.trainLoader,
+        #                                                                      [len(self.trainLoader) - val_size,
+        #                                                                       val_size])
 
         # print("Train size: ", len(self.trainLoaderNew))
         # print("Test size: ", len(self.testLoaderNew))
